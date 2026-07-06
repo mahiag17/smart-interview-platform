@@ -9,6 +9,7 @@ const authRoutes = require("./routes/authRoutes");
 const questionRoutes = require("./routes/questionRoutes");
 const trackerRoutes = require("./routes/trackerRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const { notFound, errorHandler,} = require("./middleware/errorMiddleware");
 
@@ -24,6 +25,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/tracker", trackerRoutes);
 app.use("/api/resume", resumeRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
