@@ -1,15 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+dotenv.config();
 
 const connectDB = require("./config/db");
+
 const authRoutes = require("./routes/authRoutes");
 const questionRoutes = require("./routes/questionRoutes");
 const trackerRoutes = require("./routes/trackerRoutes");
+const resumeRoutes = require("./routes/resumeRoutes");
 
 const { notFound, errorHandler,} = require("./middleware/errorMiddleware");
 
-dotenv.config();
 
 connectDB();
 
@@ -21,6 +23,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/tracker", trackerRoutes);
+app.use("/api/resume", resumeRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
