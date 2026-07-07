@@ -1,4 +1,10 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+} from "react";
+
+import api from "../services/api";
 
 const AuthContext = createContext();
 
@@ -11,21 +17,52 @@ export function AuthProvider({ children }) {
     localStorage.getItem("token") || null
   );
 
-  const login = (userData, jwtToken) => {
+  // Login
+  const login = async (email, password) => {
+    const response = await api.post("/auth/login", {
+      email,
+      password,
+    });
+
+    const { token, ...userData } = response.data;
+
     setUser(userData);
-    setToken(jwtToken);
+    setToken(token);
 
     localStorage.setItem(
       "user",
       JSON.stringify(userData)
     );
 
-    localStorage.setItem(
-      "token",
-      jwtToken
-    );
+    localStorage.setItem("token", token);
+
+    return response.data;
   };
 
+  // Signup
+  const signup = async (name, email, password) => {
+    const response = await api.post("/auth/register", {
+      name,
+      email,
+      password,
+    });
+
+    const { token, ...userData } = response.data;
+
+    setUser(userData);
+    setToken(token);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(userData)
+    );
+
+    localStorage.setItem("token", token);
+
+    return response.data;
+  };
+
+  // Logout
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -40,6 +77,7 @@ export function AuthProvider({ children }) {
         user,
         token,
         login,
+        signup,
         logout,
       }}
     >
@@ -48,5 +86,6 @@ export function AuthProvider({ children }) {
   );
 }
 
-export const useAuth = () =>
-  useContext(AuthContext);
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
